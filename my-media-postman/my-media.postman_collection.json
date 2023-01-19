@@ -1,0 +1,2235 @@
+{
+	"info": {
+		"_postman_id": "4feffad6-5e70-498e-b8c2-80b1309a1fb5",
+		"name": "my-media",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24723095"
+	},
+	"item": [
+		{
+			"name": "movies",
+			"item": [
+				{
+					"name": "get movies",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returns paged content\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response).to.be.an(\"object\");\r",
+									"    pm.expect(response[\"content\"]).to.be.an(\"array\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseAPIUrl}}/movie",
+							"host": [
+								"{{baseAPIUrl}}"
+							],
+							"path": [
+								"movie"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get 10 movies",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Shoul return more than 0 movies\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    const movies = response[\"content\"];\r",
+									"    pm.expect(movies).lengthOf.above(0);\r",
+									"    const movie = movies[0];\r",
+									"    if (movie){\r",
+									"        pm.collectionVariables.set(\"movieId\", movie.movieId);\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseAPIUrl}}/movie?page=0&pageSize=10",
+							"host": [
+								"{{baseAPIUrl}}"
+							],
+							"path": [
+								"movie"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search for movie",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"const searchTerm = pm.collectionVariables.get(\"goodMovieSearchTerm\");\r",
+									"\r",
+									"pm.test(\"Should return more than 0 movies containing '\" + searchTerm + \"'\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    const movies = response[\"content\"];\r",
+									"    pm.expect(movies).lengthOf.above(0);\r",
+									"    for(var movie of movies) {\r",
+									"        pm.expect(movie.movieName.toLowerCase()).contains(searchTerm.toLowerCase());\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseAPIUrl}}/movie/search?title={{goodMovieSearchTerm}}",
+							"host": [
+								"{{baseAPIUrl}}"
+							],
+							"path": [
+								"movie",
+								"search"
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "{{goodMovieSearchTerm}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search for movie bad terms",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseAPIUrl}}/movie/search?title={{badMovieSearchTerm}}",
+							"host": [
+								"{{baseAPIUrl}}"
+							],
+							"path": [
+								"movie",
+								"search"
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "{{badMovieSearchTerm}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "tv-shows",
+			"item": [
+				{
+					"name": "get tv-shows",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returns paged content\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response).to.be.an(\"object\");\r",
+									"    pm.expect(response[\"content\"]).to.be.an(\"array\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseAPIUrl}}/tv-show",
+							"host": [
+								"{{baseAPIUrl}}"
+							],
+							"path": [
+								"tv-show"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get 10 tv-shows",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Shoul return more than 0 tv-shows\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    const tvShows = response[\"content\"];\r",
+									"    pm.expect(tvShows).lengthOf.above(0);\r",
+									"    const tvShow = tvShows[0];\r",
+									"    if (tvShow){\r",
+									"        pm.collectionVariables.set(\"tvShowId\", tvShow.tvShowId);\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseAPIUrl}}/tv-show?page=1&pageSize=10",
+							"host": [
+								"{{baseAPIUrl}}"
+							],
+							"path": [
+								"tv-show"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search for tv-show",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const searchTerm = pm.collectionVariables.get(\"goodTvShowSearchTerm\");\r",
+									"\r",
+									"pm.test(\"Shoul return more than 0 tv-shows containing '\" + searchTerm + \"'\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    const tvShows = response[\"content\"];\r",
+									"    pm.expect(tvShows).lengthOf.above(0);\r",
+									"    for(var tvShow of tvShows) {\r",
+									"        pm.expect(tvShow.tvShowName.toLowerCase()).contains(searchTerm.toLowerCase());\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseAPIUrl}}/tv-show/search?title={{goodTvShowSearchTerm}}",
+							"host": [
+								"{{baseAPIUrl}}"
+							],
+							"path": [
+								"tv-show",
+								"search"
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "{{goodTvShowSearchTerm}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search for tv-show bad terms",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseAPIUrl}}/tv-show/search?title={{badTvShowSearchTerm}}",
+							"host": [
+								"{{baseAPIUrl}}"
+							],
+							"path": [
+								"tv-show",
+								"search"
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "{{badTvShowSearchTerm}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "create-account",
+			"item": [
+				{
+					"name": "create account",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Should create new user\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    const jwt = response[\"jwt\"];\r",
+									"    pm.expect(jwt).to.be.a(\"string\");\r",
+									"    if (jwt) {\r",
+									"        const request = JSON.parse(pm.request.body);\r",
+									"        const newUsername = request['username'];\r",
+									"        const newPassword = request['password'];\r",
+									"        pm.collectionVariables.set(\"newUsername\", newUsername);\r",
+									"        pm.collectionVariables.set(\"newPassword\", newPassword);\r",
+									"        pm.collectionVariables.set(\"accessToken\", jwt);\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept-encoding": true,
+							"connection": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"{{$randomUserName}}\",\r\n    \"password\": \"{{$randomPassword}}!1a\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseAuthUrl}}/create_account",
+							"host": [
+								"{{baseAuthUrl}}"
+							],
+							"path": [
+								"create_account"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get auth token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Should get jwt token from api\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    const jwt = response[\"jwt\"];\r",
+									"    pm.expect(jwt).to.be.a(\"string\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept-encoding": true,
+							"connection": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"{{newUsername}}\",\r\n    \"password\": \"{{newPassword}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseAuthUrl}}",
+							"host": [
+								"{{baseAuthUrl}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "refresh auth token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Should get a new jwt token on refresh\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    const jwt = response[\"jwt\"];\r",
+									"    pm.expect(jwt).to.be.a(\"string\");\r",
+									"    pm.collectionVariables.set(\"accessToken\", jwt);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"connection": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"{{newUsername}}\",\r\n    \"password\": \"{{newPassword}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseAuthUrl}}",
+							"host": [
+								"{{baseAuthUrl}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "user-add-user-movie",
+					"item": [
+						{
+							"name": "create user movie entry",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"movieId\": {{movieId}}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/movie",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"movie"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create user movie bad movie",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"movieId\": -1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/movie",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"movie"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create user movie entry no auth",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 403\", function () {\r",
+											"    pm.response.to.have.status(403);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"movieId\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/movie",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"movie"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "user-update-user-movie",
+					"item": [
+						{
+							"name": "update user movie",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Should return the updated AppUserMovie\", function () {\r",
+											"    const appUserMovie = pm.response.json();\r",
+											"    pm.expect(appUserMovie).is.an(\"object\");\r",
+											"    pm.expect(appUserMovie[\"watched\"]).to.be.true;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"appUserMovieId\": {{appUserMovieId}},\r\n    \"watched\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/movie",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"movie"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update user movie rewatch",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Updated user movie watchCount attribute should be 1\", function () {\r",
+											"    const response = pm.response.json();\r",
+											"    const appUserMovie = response;\r",
+											"    pm.expect(appUserMovie).is.an(\"Object\");\r",
+											"    pm.expect(appUserMovie[\"watchCount\"]).to.eql(1);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"appUserMovieId\": {{appUserMovieId}},\r\n    \"watchCount\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/movie",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"movie"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update user movie bad rewatch value",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"expectedError = \"Minimum watch count can not be less than 0\";\r",
+											"pm.test(\"Should return error: \" + expectedError, function () {\r",
+											"    const response = pm.response.json();\r",
+											"    const errorMsg = response[0];\r",
+											"    pm.expect(errorMsg).is.a(\"string\");\r",
+											"    pm.expect(errorMsg).eqls(\"Minimum watch count can not be less than 0\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"appUserMovieId\": {{appUserMovieId}},\r\n    \"watchCount\": -1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/movie",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"movie"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update user movie watched",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"appUserMovieId\": -1,\r\n    \"watched\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/movie",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"movie"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update user movie bad movie",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"appUserMovieId\": -1,\r\n    \"watchCount\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/movie",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"movie"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update user movie no auth",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 403\", function () {\r",
+											"    pm.response.to.have.status(403);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"appUserMovieId\": -1,\r\n    \"watched\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/movie",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"movie"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"const movie = {",
+									"    movieId: pm.collectionVariables.get(\"movieId\")",
+									"};",
+									"",
+									"pm.sendRequest({",
+									"    url: `${pm.collectionVariables.get(\"baseAPIUrl\")}/user/movie`,",
+									"    method: \"POST\",",
+									"    header: {",
+									"        \"Content-Type\": \"application/json\",",
+									"        Authorization: `Bearer ${pm.collectionVariables.get(\"accessToken\")}`",
+									"    },",
+									"    body: JSON.stringify(movie)",
+									"}, (err, res) => {",
+									"    const appUserMovieId = res.json()[\"appUserMovieId\"];",
+									"    pm.collectionVariables.set(\"appUserMovieId\", appUserMovieId);",
+									"})"
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "user-delete-user-movie",
+					"item": [
+						{
+							"name": "delete user movie",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"appUserMovieId\": {{appUserMovieId}}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/movie",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"movie"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete user movie error",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"appUserMovieId\": -1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/movie",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"movie"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete user movie no auth",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 403\", function () {\r",
+											"    pm.response.to.have.status(403);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"appUserMovieId\": {{appUserMovieId}}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/movie",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"movie"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"const movie = {",
+									"    movieId: pm.collectionVariables.get(\"movieId\")",
+									"};",
+									"",
+									"pm.sendRequest({",
+									"    url: `${pm.collectionVariables.get(\"baseAPIUrl\")}/user/movie`,",
+									"    method: \"POST\",",
+									"    header: {",
+									"        \"Content-Type\": \"application/json\",",
+									"        Authorization: `Bearer ${pm.collectionVariables.get(\"accessToken\")}`",
+									"    },",
+									"    body: JSON.stringify(movie)",
+									"}, (err, res) => {",
+									"    const appUserMovieId = res.json()[\"appUserMovieId\"];",
+									"    pm.collectionVariables.set(\"appUserMovieId\", appUserMovieId);",
+									"})"
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "user-get-tv-show",
+					"item": [
+						{
+							"name": "user-get-tv-shows",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/tv-shows",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"tv-shows"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "user-add-user-tv-show",
+					"item": [
+						{
+							"name": "user add tv-show",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Should get an AppUserTvShow with a set id\", () => {\r",
+											"    const appUserTvShow = pm.response.json();\r",
+											"    pm.expect(appUserTvShow).is.an(\"Object\");\r",
+											"    pm.expect(appUserTvShow[\"appUserTvShowId\"]).is.not.null;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"tvShowId\": {{tvShowId}}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/tv-show",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"tv-show"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "user add tv-show bad tv-show",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"tvShowId\": -1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/tv-show",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"tv-show"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "user add tv-show no auth",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 403\", function () {\r",
+											"    pm.response.to.have.status(403);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"tvShowId\": -1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/tv-show",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"tv-show"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "user-update-user-tv-show",
+					"item": [
+						{
+							"name": "update user tv-show watched",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Should return the updated AppUserTvShow\", function () {\r",
+											"    const appUserMovie = pm.response.json();\r",
+											"    pm.expect(appUserMovie).is.an(\"object\");\r",
+											"    pm.expect(appUserMovie[\"watched\"]).to.be.true;\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"appUserTvShowId\": {{appUserTvShowId}},\r\n    \"watched\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/tv-show",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"tv-show"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update user tv-show rewatchCount",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Should return the updated AppUserTvShow\", function () {\r",
+											"    const appUserMovie = pm.response.json();\r",
+											"    pm.expect(appUserMovie).to.be.an(\"object\");\r",
+											"    pm.expect(appUserMovie[\"watchCount\"]).to.equal(1);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"appUserTvShowId\": {{appUserTvShowId}},\r\n    \"watchCount\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/tv-show",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"tv-show"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update user tv-show season",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Should return the updated AppUserTvShow\", function () {\r",
+											"    const appUserMovie = pm.response.json();\r",
+											"    pm.expect(appUserMovie).to.be.an(\"object\");\r",
+											"    pm.expect(appUserMovie[\"season\"]).to.equal(1);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"appUserTvShowId\": {{appUserTvShowId}},\r\n    \"season\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/tv-show",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"tv-show"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update user tv-show episode",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Should return the updated AppUserTvShow\", function () {\r",
+											"    const appUserMovie = pm.response.json();\r",
+											"    pm.expect(appUserMovie).to.be.an(\"object\");\r",
+											"    pm.expect(appUserMovie[\"episode\"]).to.equal(1);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"appUserTvShowId\": {{appUserTvShowId}},\r\n    \"episode\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/tv-show",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"tv-show"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update user tv-show bad season",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"expectedError = \"Minimum season number can not be less than 0\"\r",
+											"pm.test(\"Should return error: \" + expectedError, function () {\r",
+											"    const errors = pm.response.json();\r",
+											"    pm.expect(errors).to.be.an(\"array\");\r",
+											"    pm.expect(errors).to.include(expectedError);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"appUserTvShowId\": {{appUserTvShowId}},\r\n    \"season\": -1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/tv-show",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"tv-show"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update user tv-show bad episode",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"expectedError = \"Minimum episode number can not be less than 0\"\r",
+											"pm.test(\"Should return the updated AppUserTvShow\", function () {\r",
+											"    const errors = pm.response.json();\r",
+											"    pm.expect(errors).to.be.an(\"array\");\r",
+											"    pm.expect(errors).to.include(expectedError);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"appUserTvShowId\": {{appUserTvShowId}},\r\n    \"episode\": -1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/tv-show",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"tv-show"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update user tv-show bad rewatch",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"expectedError = \"Minimum watch count can not be less than 0\";\r",
+											"pm.test(\"Should return error: \" + expectedError, function () {\r",
+											"    const errors = pm.response.json();\r",
+											"    pm.expect(errors).is.an(\"array\");\r",
+											"    pm.expect(errors).to.include(expectedError);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"appUserTvShowId\": {{appUserTvShowId}},\r\n    \"watchCount\": -1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/tv-show",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"tv-show"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update user tv-show not found",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"appUserTvShowId\": -1,\r\n    \"watched\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/tv-show",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"tv-show"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update user tv-show no auth",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 403\", function () {\r",
+											"    pm.response.to.have.status(403);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"appUserTvShowId\": -1,\r\n    \"watched\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/tv-show",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"tv-show"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"const tvShow = {",
+									"    tvShowId: pm.collectionVariables.get(\"tvShowId\")",
+									"};",
+									"",
+									"pm.sendRequest({",
+									"    url: `${pm.collectionVariables.get(\"baseAPIUrl\")}/user/tv-show`,",
+									"    method: \"POST\",",
+									"    header: {",
+									"        \"Content-Type\": \"application/json\",",
+									"        Authorization: `Bearer ${pm.collectionVariables.get(\"accessToken\")}`",
+									"    },",
+									"    body: JSON.stringify(tvShow)",
+									"}, (err, res) => {",
+									"    const appUserTvShowId = res.json()[\"appUserTvShowId\"];",
+									"    pm.collectionVariables.set(\"appUserTvShowId\", appUserTvShowId);",
+									"});"
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "user-delete-user-tv-show",
+					"item": [
+						{
+							"name": "delete user tv-show",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"appUserTvShowId\": {{appUserTvShowId}}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/tv-show",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"tv-show"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete user tv-show error",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"appUserTvShowId\": -1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/tv-show",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"tv-show"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete user tv-show no auth",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 403\", function () {\r",
+											"    pm.response.to.have.status(403);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"appUserTvShowId\": {{appUserTvShowId}}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/tv-show",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"tv-show"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"const tvShow = {",
+									"    tvShowId: pm.collectionVariables.get(\"tvShowId\")",
+									"};",
+									"",
+									"pm.sendRequest({",
+									"    url: `${pm.collectionVariables.get(\"baseAPIUrl\")}/user/tv-show`,",
+									"    method: \"POST\",",
+									"    header: {",
+									"        \"Content-Type\": \"application/json\",",
+									"        Authorization: `Bearer ${pm.collectionVariables.get(\"accessToken\")}`",
+									"    },",
+									"    body: JSON.stringify(tvShow)",
+									"}, (err, res) => {",
+									"    const appUserTvShowId = res.json()[\"appUserTvShowId\"];",
+									"    pm.collectionVariables.set(\"appUserTvShowId\", appUserTvShowId);",
+									"});"
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"const user = {",
+							"    username: pm.variables.replaceIn(\"{{$randomUserName}}\"),",
+							"    password: `${pm.variables.replaceIn(\"{{$randomPassword}}\")}!1a`",
+							"}",
+							"",
+							"pm.sendRequest({",
+							"    url: `${pm.collectionVariables.get(\"baseAuthUrl\")}/create_account`,",
+							"    method: \"POST\",",
+							"    header: {",
+							"        \"Content-Type\": \"application/json\",",
+							"    },",
+							"    body: JSON.stringify(user)",
+							"}, (err, res) => {",
+							"    pm.collectionVariables.set(\"newUsername\", user.username);",
+							"    pm.collectionVariables.set(\"newPassword\", user.password);",
+							"    const jwt = res.json()[\"jwt\"];",
+							"    pm.collectionVariables.set(\"accessToken\", jwt);",
+							"})"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{accessToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseAPIUrl",
+			"value": "http://localhost:8080/api"
+		},
+		{
+			"key": "baseAuthUrl",
+			"value": "http://localhost:8080/auth",
+			"type": "string"
+		},
+		{
+			"key": "adminUsername",
+			"value": "admin username",
+			"type": "string"
+		},
+		{
+			"key": "adminPassword",
+			"value": "admin password",
+			"type": "string"
+		},
+		{
+			"key": "movieId",
+			"value": ""
+		},
+		{
+			"key": "accessToken",
+			"value": "access token"
+		},
+		{
+			"key": "newUsername",
+			"value": ""
+		},
+		{
+			"key": "newPassword",
+			"value": ""
+		},
+		{
+			"key": "userMovieId",
+			"value": "",
+			"disabled": true
+		},
+		{
+			"key": "appUserMovieId",
+			"value": ""
+		},
+		{
+			"key": "tvShowId",
+			"value": ""
+		},
+		{
+			"key": "appUserTvShowId",
+			"value": ""
+		},
+		{
+			"key": "goodMovieSearchTerm",
+			"value": "the"
+		},
+		{
+			"key": "badMovieSearchTerm",
+			"value": "zyxwabcd"
+		},
+		{
+			"key": "goodTvShowSearchTerm",
+			"value": "a"
+		},
+		{
+			"key": "badTvShowSearchTerm",
+			"value": "zyxwabcd 123"
+		}
+	]
+}

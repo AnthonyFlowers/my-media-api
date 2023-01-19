@@ -1,0 +1,54 @@
+@url = http://localhost:8080
+@token = eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJteW1lZGlhIiwiYXBwX3VzZXJfaWQiOjEsImF1dGhvcml0aWVzIjoiQURNSU4iLCJzdWIiOiJqb2huc21pdGgiLCJleHAiOjE2NjkyMzY2NzZ9.es98jn_L6hAlMz9DjU_U70F1dsPxqhf3zguYuixzZks
+
+###
+
+POST {{url}}/auth/create_account HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "johnsmith",
+    "password": "P@ssw0rd!"
+}
+
+###
+
+POST {{url}}/auth HTTP/1.1
+Content-Type:  application/json
+
+{
+    "username": "johnsmith",
+    "password": "P@ssw0rd!"
+}
+
+###
+
+POST {{url}}/auth/refresh_token HTTP/1.1
+Authorization: Bearer {{token}}
+
+###
+
+GET {{url}}/api/movie HTTP/1.1
+Authorization: Bearer {{token}}
+
+###
+
+POST {{url}}/api/movie/add HTTP/1.1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "movieId": 3
+}
+
+###
+
+GET {{url}}/api/movie/recent/0 HTTP/1.1
+# Authorization: Bearer {{token}}
+
+###
+
+GET {{url}}/api/movie/user HTTP/1.1
+Authorization: Bearer {{token}}
+
+###

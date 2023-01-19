@@ -1,5 +1,6 @@
 package mymedia.data;
 
+import mymedia.models.Movie;
 import mymedia.models.MovieNightGroup;
 import mymedia.security.AppUser;
 import mymedia.security.AppUserRepository;
@@ -11,6 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -93,5 +95,11 @@ class MovieNightGroupRepositoryTest {
         assertNotNull(group);
         repository.delete(group);
         assertNull(repository.findById(3).orElse(null));
+    }
+
+    @Test
+    void findGroupWithTopMovies() {
+        Map<MovieNightGroup, Movie> groupMovieMap = repository.findGroupsWithTopMovies(1);
+        System.out.println(groupMovieMap.values());
     }
 }

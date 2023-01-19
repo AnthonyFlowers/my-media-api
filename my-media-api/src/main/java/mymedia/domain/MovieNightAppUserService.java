@@ -26,7 +26,6 @@ public class MovieNightAppUserService {
     }
 
     public Movie getTopMovie(int groupId) {
-//        return repository.findTopMovieByGroupId(groupId);
-    return null;
+        return repository.findTopMovieByGroupId(groupId);
     }
 }

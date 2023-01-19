@@ -26,6 +26,11 @@ public class MovieNightGroup {
             inverseJoinColumns = @JoinColumn(name = "app_user_id"))
     private List<AppUser> users;
 
+    @OneToMany
+    @JoinTable(joinColumns = @JoinColumn(name = "group_id"))
+    private List<MovieNightAppUser> movieNightAppUsers;
+
+
     public int getGroupId() {
         return groupId;
     }
@@ -56,5 +61,9 @@ public class MovieNightGroup {
 
     public void addUser(AppUser user) {
         users.add(user);
+    }
+
+    public List<MovieNightAppUser> getMovieNightAppUsers() {
+        return movieNightAppUsers;
     }
 }

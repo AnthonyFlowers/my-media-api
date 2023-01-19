@@ -29,5 +29,29 @@ select * from movie_night_group;
 select user_vote, count(*) as votes from movie_night_app_user 
 where user_vote is not null
 group by user_vote
-limit 1
-desc;
+limit 1;
+
+select mng.group_id, mngau.user_vote from movie_night_group mng join movie_night_app_user mngau
+on mng.group_id = mngau.group_id
+group by mng.group_id, mngau.user_vote
+having count(mngau.user_vote) = (
+	select max(user_vote_count) from (
+		select count(user_vote) as user_vote_count
+		from movie_night_app_user mnau2
+        where mnau2.group_id = mng.group_id
+		group by mnau2.group_id, mnau2.user_vote
+	) t2
+);
+
+insert into movie_night_app_user (app_user_id, group_id, user_vote) values
+(1,2,2),
+(1,2,2),
+(1,2,2);
+
+select * from movie_night_app_user;
+
+select max(cnt) from (
+	select count(user_vote) as cnt
+	from movie_night_app_user mnau2
+	group by mnau2.group_id, mnau2.user_vote
+) t2;

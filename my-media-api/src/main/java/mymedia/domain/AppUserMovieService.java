@@ -1,15 +1,14 @@
 package mymedia.domain;
 
+import jakarta.validation.Validator;
 import mymedia.data.AppUserMovieRepository;
 import mymedia.models.AppUserMovie;
 import mymedia.models.Movie;
 import mymedia.security.AppUser;
-import mymedia.security.AppUserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import javax.validation.Validator;
 import java.util.List;
 
 @Service

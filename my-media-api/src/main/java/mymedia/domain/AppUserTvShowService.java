@@ -1,5 +1,6 @@
 package mymedia.domain;
 
+import jakarta.validation.Validator;
 import mymedia.data.AppUserTvShowRepository;
 import mymedia.models.AppUserTvShow;
 import mymedia.models.TvShow;
@@ -8,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import javax.validation.Validator;
 import java.util.List;
 
 @Service
@@ -88,7 +88,7 @@ public class AppUserTvShowService {
         Result<AppUserTvShow> result = new Result<>();
         validator.validate(userTvShow).forEach((vi) ->
                 result.addMessage(ResultType.INVALID, vi.getMessage()));
-        if(!result.isSuccess()){
+        if (!result.isSuccess()) {
             return result;
         }
         AppUserTvShow foundAppUserTvShow = findByUserTvShowId(userTvShow.getAppUserTvShowId());

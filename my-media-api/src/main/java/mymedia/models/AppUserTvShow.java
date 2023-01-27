@@ -1,9 +1,8 @@
 package mymedia.models;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import mymedia.security.AppUser;
-
-import javax.persistence.*;
-import javax.validation.constraints.Min;
 
 @Entity
 @Table(name = "app_user_tv_show")
@@ -28,7 +27,8 @@ public class AppUserTvShow {
     @Min(value = 0, message = "Minimum watch count can not be less than 0")
     private int watchCount;
 
-    public AppUserTvShow() {}
+    public AppUserTvShow() {
+    }
 
     public AppUserTvShow(TvShow tvShow, AppUser appUser) {
         this.tvShow = tvShow;

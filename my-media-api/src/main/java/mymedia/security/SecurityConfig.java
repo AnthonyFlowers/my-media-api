@@ -22,32 +22,37 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationConfiguration authConfig) throws Exception {
         http.csrf().disable();
         http.cors();
-        http.authorizeRequests()
-                .antMatchers(HttpMethod.POST,
+//        http.authorizeHttpRequests().requestMatchers(HttpMethod.POST, "");
+        http.authorizeHttpRequests()
+                .requestMatchers(HttpMethod.POST,
                         "/auth/create_account",
                         "/auth"
                 ).permitAll()
-                .antMatchers(HttpMethod.POST,
+                .requestMatchers(HttpMethod.POST,
                         "/auth/refresh_token"
                 ).authenticated()
-                .antMatchers(HttpMethod.GET,
+                .requestMatchers(HttpMethod.GET,
                         "/api/movie",
                         "/api/movie/search",
-                        "/api/movie-night/group"
+                        "/api/movie/find-by-name",
+                        "/api/movie-night/group",
+                        "/api/movie-night/group/with-top-movies"
                 ).permitAll()
-                .antMatchers(
+                .requestMatchers(
+                        "/api/user/exists",
                         "/api/user/movie",
                         "/api/user/movie/all"
                 ).authenticated()
-                .antMatchers(HttpMethod.GET,
+                .requestMatchers(HttpMethod.GET,
                         "/api/tv-show",
                         "/api/tv-show/search"
                 ).permitAll()
-                .antMatchers(
+                .requestMatchers(
                         "/api/user/tv-show",
-                        "/api/user/tv-show/all"
+                        "/api/user/tv-show/all",
+                        "/api/movie-night/group"
                 ).authenticated()
-                .antMatchers("/**").denyAll()
+                .requestMatchers("/**").denyAll()
                 .and()
                 .addFilter(new JwtRequestFilter(authenticationManager(authConfig), converter))
                 .sessionManagement()

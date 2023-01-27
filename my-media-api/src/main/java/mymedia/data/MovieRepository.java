@@ -11,4 +11,5 @@ public interface MovieRepository extends JpaRepository<Movie, Integer> {
 
     Page<Movie> findByMovieNameContainsIgnoreCase(PageRequest pr, String name);
 
+    Movie findFirstByMovieName(String title);
 }

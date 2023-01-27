@@ -1,5 +1,6 @@
 package mymedia.security;
 
+import jakarta.transaction.Transactional;
 import mymedia.data.KnownGoodState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -48,7 +48,13 @@ class AppUserRepositoryTest {
     void shouldFindUserJohnSmith() {
         AppUser user = repository.findByUsername("johnsmith");
         assertNotNull(user);
-        assertEquals("johnsmith", user.getUsername());
+        assertEquals(1, user.getAppUserId());
+    }
+
+    @Test
+    void shouldNotFindUserRandomUser() {
+        AppUser user = repository.findByUsername("randomuser");
+        assertNull(user);
     }
 
     @Test
@@ -86,5 +92,10 @@ class AppUserRepositoryTest {
         Collection<GrantedAuthority> authorities = user.getAuthorities();
         assertEquals(1, authorities.size());
         assertTrue(authorities.stream().anyMatch((a) -> Objects.equals(a.getAuthority(), "ADMIN")));
+    }
+
+    @Test
+    void shouldFindAllUsersByUsernameIn() {
+
     }
 }

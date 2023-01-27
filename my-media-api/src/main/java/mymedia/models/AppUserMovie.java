@@ -1,9 +1,8 @@
 package mymedia.models;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import mymedia.security.AppUser;
-
-import javax.persistence.*;
-import javax.validation.constraints.Min;
 
 @Entity
 @Table(name = "app_user_movie")

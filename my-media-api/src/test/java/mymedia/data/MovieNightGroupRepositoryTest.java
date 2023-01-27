@@ -1,5 +1,6 @@
 package mymedia.data;
 
+import jakarta.transaction.Transactional;
 import mymedia.models.Movie;
 import mymedia.models.MovieNightGroup;
 import mymedia.security.AppUser;
@@ -10,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,6 +27,7 @@ class MovieNightGroupRepositoryTest {
     AppUserRepository userRepository;
 
     private boolean isSetUp = false;
+
     @BeforeEach
     public void setUp() {
         if (!isSetUp) {
@@ -42,7 +42,7 @@ class MovieNightGroupRepositoryTest {
         newGroup.setGroupName("New Group");
         newGroup.setMovies(movieRepository.findAll());
         MovieNightGroup savedGroup = repository.save(newGroup);
-        assertTrue(savedGroup.getGroupId() > 0);
+        assertEquals(6, savedGroup.getGroupId());
         assertNotNull(savedGroup.getMovies());
     }
 
@@ -98,8 +98,20 @@ class MovieNightGroupRepositoryTest {
     }
 
     @Test
-    void findGroupWithTopMovies() {
-        Map<MovieNightGroup, Movie> groupMovieMap = repository.findGroupsWithTopMovies(1);
-        System.out.println(groupMovieMap.values());
+    void findGroup1WithTopMovieIronMan() {
+        List<GroupWithTopMovie> groupsWithTopMovies = repository.findGroupsWithTopMovies();
+        System.out.println(groupsWithTopMovies.get(0).getGroup().getGroupId());
+        System.out.println(groupsWithTopMovies.get(0).getTopMovie().getMovieId());
+        GroupWithTopMovie groupWithTopMovie = groupsWithTopMovies.get(0);
+        assertEquals(1, groupWithTopMovie.getGroup().getGroupId());
+        assertEquals("Iron Man", groupWithTopMovie.getTopMovie().getMovieName());
+    }
+
+    @Test
+    void findGroup2WithTopMovieIronMan2() {
+        List<GroupWithTopMovie> groupsWithTopMovies = repository.findGroupsWithTopMovies();
+        GroupWithTopMovie groupWithTopMovie = groupsWithTopMovies.get(1);
+        assertEquals(5, groupWithTopMovie.getGroup().getGroupId());
+        assertEquals("Iron Man 2", groupWithTopMovie.getTopMovie().getMovieName());
     }
 }

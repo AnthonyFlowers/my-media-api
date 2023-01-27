@@ -175,12 +175,15 @@ delete from movie_night_group;
 		("Test Group"), -- read
         ("Friends"), -- update ("Discord Friends")
         ("Online"), -- delete
-        ("Extra Group");
+        ("Extra Group"),
+        ("Another Group");
         -- test create ("New Group")
         
 	insert into movie_night_group_movie (group_id, movie_id) values
 		(1, 1), -- read
         (1, 2),
+        (5, 1), -- read
+        (5, 2),
         (2, 1); -- delete
         -- test create (2, 2)
         
@@ -188,6 +191,8 @@ delete from movie_night_group;
 		(1, 1, true, 1), -- read
         (2, 4, true, null), -- update (2, 4, true, 1)
         (2, 1, false, 1), -- read
+        (2, 5, true, 2),
+        (2, 5, false, 2), -- read
         (2, 2, true, null); -- delete
         -- test create "adding a user to a group" (1, 4, false, null)
 	

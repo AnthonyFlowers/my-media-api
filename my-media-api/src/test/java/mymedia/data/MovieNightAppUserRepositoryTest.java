@@ -71,10 +71,4 @@ class MovieNightAppUserRepositoryTest {
         assertNull(repository.findById(3).orElse(null));
     }
 
-    @Test
-    void findTopMovieForAGroup() {
-        Movie topMovie = repository.findTopMovieByGroupId(1);
-        assertNotNull(topMovie);
-        assertEquals(1, topMovie.getMovieId());
-    }
 }

@@ -1,9 +1,10 @@
 package mymedia.models;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import mymedia.security.AppUser;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
@@ -12,6 +13,8 @@ public class MovieNightGroup {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int groupId;
+
+    @Size(min = 5, max = 50)
     @NotNull
     private String groupName;
     @ManyToMany
@@ -25,11 +28,6 @@ public class MovieNightGroup {
             joinColumns = @JoinColumn(name = "group_id"),
             inverseJoinColumns = @JoinColumn(name = "app_user_id"))
     private List<AppUser> users;
-
-    @OneToMany
-    @JoinTable(joinColumns = @JoinColumn(name = "group_id"))
-    private List<MovieNightAppUser> movieNightAppUsers;
-
 
     public int getGroupId() {
         return groupId;
@@ -59,11 +57,11 @@ public class MovieNightGroup {
         return users.stream().map(AppUser::getUsername).toList();
     }
 
-    public void addUser(AppUser user) {
-        users.add(user);
+    public void setUsers(List<AppUser> users) {
+        this.users = users;
     }
 
-    public List<MovieNightAppUser> getMovieNightAppUsers() {
-        return movieNightAppUsers;
+    public void addUser(AppUser user) {
+        users.add(user);
     }
 }

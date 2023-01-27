@@ -88,4 +88,17 @@ class MovieRepositoryTest {
         Page<Movie> moviePage = repository.findByMovieNameContainsIgnoreCase(pr, "zyxwabcd");
         assertFalse(moviePage.hasContent());
     }
+
+    @Test
+    void shouldFindFirstByMovieName() {
+        Movie movie = repository.findFirstByMovieName("Iron Man");
+        assertNotNull(movie);
+        assertEquals(1, movie.getMovieId());
+    }
+
+    @Test
+    void shouldNotFindFirstByMovieName() {
+        Movie movie = repository.findFirstByMovieName("randommoviename");
+        assertNull(movie);
+    }
 }

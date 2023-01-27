@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AppUserService implements UserDetailsService {
     private final AppUserRepository repository;
@@ -26,6 +28,14 @@ public class AppUserService implements UserDetailsService {
             throw new UsernameNotFoundException(username + " not found");
         }
         return user;
+    }
+
+    public boolean usernameExists(String username) {
+        if (username == null || username.isBlank()) {
+            return false;
+        }
+        AppUser foundUser = repository.findByUsername(username);
+        return foundUser != null && foundUser.isEnabled();
     }
 
     public Result<AppUser> create(String username, String password) {
@@ -62,12 +72,12 @@ public class AppUserService implements UserDetailsService {
 
     private Result<AppUser> validate(String username, String password) {
         Result<AppUser> result = new Result<>();
-        if (username == null || username.isBlank()) {
-            result.addMessage(ResultType.INVALID, "username is required");
+        if (repository.findByUsername(username) != null) {
+            result.addMessage(ResultType.INVALID, "username already in use");
             return result;
         }
-        if(repository.findByUsername(username) != null){
-            result.addMessage(ResultType.INVALID, "username already in use");
+        if (username == null || username.isBlank()) {
+            result.addMessage(ResultType.INVALID, "username is required");
             return result;
         }
         if (password == null) {
@@ -103,5 +113,9 @@ public class AppUserService implements UserDetailsService {
             }
         }
         return digits > 0 && letters > 0 && others > 0;
+    }
+
+    public List<AppUser> findAllByUsernames(List<String> users) {
+        return repository.findAllByUsernameIn(users);
     }
 }

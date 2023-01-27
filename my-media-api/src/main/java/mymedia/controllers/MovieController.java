@@ -53,4 +53,13 @@ public class MovieController {
         }
         return ErrorResponse.build(result);
     }
+
+    @GetMapping("/find-by-name")
+    public ResponseEntity<?> getMovieByName(@RequestParam String title) {
+        Movie movie = movieService.findByMovieName(title);
+        if (movie == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(movie, HttpStatus.OK);
+    }
 }

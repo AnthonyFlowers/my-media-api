@@ -1,6 +1,6 @@
 package mymedia.models;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "movie_night_app_user")

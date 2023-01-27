@@ -1,5 +1,6 @@
 package mymedia.domain;
 
+import jakarta.validation.Validator;
 import mymedia.data.MovieRepository;
 import mymedia.models.Movie;
 import org.springframework.data.domain.Page;
@@ -7,7 +8,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import javax.validation.Validator;
 
 @Service
 public class MovieService {
@@ -72,5 +72,12 @@ public class MovieService {
             }
         }
         return result;
+    }
+
+    public Movie findByMovieName(String title) {
+        if (title == null || title.isBlank()) {
+            return null;
+        }
+        return movieRepository.findFirstByMovieName(title);
     }
 }

@@ -32,6 +32,20 @@ class AppUserServiceTest {
     }
 
     @Test
+    void shouldFindUserByUsername() {
+        AppUser user = getTestUser();
+        when(repository.findByUsername(user.getUsername()))
+                .thenReturn(user);
+        assertTrue(service.usernameExists("johnsmith"));
+    }
+
+    @Test
+    void shouldNotFindUserByUsername() {
+        when(repository.findByUsername(anyString())).thenReturn(null);
+        assertFalse(service.usernameExists("random_user"));
+    }
+
+    @Test
     void shouldCreateUser() {
         AppUser user = getTestUser();
         when(repository.save(any(AppUser.class)))

@@ -12,8 +12,9 @@ import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -29,6 +30,34 @@ class MovieServiceTest {
         when(repository.findAll(any(PageRequest.class))).thenReturn(movies);
         Page<Movie> allMovies = service.findMovies(0, 1);
         assertEquals(movies, allMovies);
+    }
+
+    @Test
+    void shouldFindByMovieName() {
+        Movie movie = new Movie();
+        when(repository.findFirstByMovieName(anyString())).thenReturn(movie);
+        Movie foundMovie = service.findByMovieName("Test");
+        assertNotNull(foundMovie);
+        assertEquals(movie, foundMovie);
+    }
+
+    @Test
+    void shouldNotFindByMovieName() {
+        when(repository.findFirstByMovieName(anyString())).thenReturn(null);
+        Movie foundMovie = service.findByMovieName("shouldn't find");
+        assertNull(foundMovie);
+    }
+
+    @Test
+    void shouldNotFindBlankMovieName() {
+        Movie foundMovie = service.findByMovieName("");
+        assertNull(foundMovie);
+    }
+
+    @Test
+    void shouldNotFindEmptyMovieName() {
+        Movie foundMovie = service.findByMovieName("   ");
+        assertNull(foundMovie);
     }
 
     private static Page<Movie> getMovieList() {

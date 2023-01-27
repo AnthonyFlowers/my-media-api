@@ -1,10 +1,10 @@
 package mymedia.security;
 
+import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -110,4 +110,8 @@ public class AppUser implements UserDetails {
         this.roles.add(user);
     }
 
+    @Override
+    public String toString() {
+        return username;
+    }
 }

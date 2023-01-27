@@ -2130,6 +2130,123 @@
 					}
 				}
 			]
+		},
+		{
+			"name": "basic-tests",
+			"item": [
+				{
+					"name": "get-groups",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/movie-night/group",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"movie-night",
+								"group"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "app-user",
+			"item": [
+				{
+					"name": "find user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"appUserId\": 1,\r\n    \"username\": \"{{newUsername}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseAPIUrl}}/user",
+							"host": [
+								"{{baseAPIUrl}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "movie-night-group",
+			"item": [
+				{
+					"name": "create movie group",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"groupName\": \"new group\",\r\n    \"users\": [{\r\n        \"username\": \"johnsmith\"\r\n    }],\r\n    \"movies\": [\r\n        {\r\n            \"movieId\": 1,\r\n            \"movieName\": \"Iron Man\",\r\n            \"movieYear\": 2008,\r\n            \"movieLength\": 126,\r\n            \"movieOverview\": \"After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil.\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseAPIUrl}}/movie-night/group",
+							"host": [
+								"{{baseAPIUrl}}"
+							],
+							"path": [
+								"movie-night",
+								"group"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"auth": {

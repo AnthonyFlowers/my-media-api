@@ -70,3 +70,5 @@ select max(cnt) from (
 	from movie_night_app_user mnau2
 	group by mnau2.group_id, mnau2.user_vote
 ) t2;
+
+select * from movie_night_group;

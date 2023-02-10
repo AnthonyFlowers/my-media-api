@@ -63,8 +63,15 @@ insert into movie_night_app_user (app_user_id, group_id, user_vote) values
 (1,2,2);
 
 select * from movie_night_app_user;
-select * from movie_night_group mng join movie_night_app_user mnau
-on mng.group_id = mnau.group_id;
+select * from movie_night_group mng join movie_night_app_user mnau join app_user au
+on mng.group_id = mnau.group_id
+and mnau.app_user_id = au.app_user_id;
+
+select mng.group_id, app_user_movie_night_group_id, au.app_user_id, moderator, username
+from movie_night_group mng join movie_night_app_user mnau join app_user au
+on mng.group_id = mnau.group_id
+and mnau.app_user_id = au.app_user_id;
+
 select max(cnt) from (
 	select count(user_vote) as cnt
 	from movie_night_app_user mnau2

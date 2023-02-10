@@ -1,15 +1,16 @@
 package mymedia.domain;
 
+import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import mymedia.data.GroupWithTopMovie;
 import mymedia.data.MovieNightGroupRepository;
-import mymedia.models.MovieNightAppUser;
 import mymedia.models.MovieNightGroup;
 import mymedia.security.AppUser;
 import mymedia.security.AppUserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 
 @Service
@@ -34,11 +35,25 @@ public class MovieNightGroupService {
         return repository.findGroupsWithTopMovies();
     }
 
-    public void saveNewGroup(MovieNightGroup group, AppUser admin) {
+    public Result<MovieNightGroup> saveNewGroup(MovieNightGroup group, AppUser admin) {
+        Result<MovieNightGroup> result = validate(group);
+        if (!result.isSuccess()) {
+            return result;
+        }
         List<AppUser> appUsers = appUserService.findAllByUsernames(group.getUsers());
         group.setUsers(appUsers);
         MovieNightGroup savedGroup = repository.save(group);
         movieNightAppUserService.addAdmin(admin.getAppUserId(), savedGroup.getGroupId());
-        System.out.println(appUsers);
+        result.setPayload(group);
+        return result;
+    }
+
+    private Result<MovieNightGroup> validate(MovieNightGroup group) {
+        Result<MovieNightGroup> result = new Result<>();
+        Set<ConstraintViolation<MovieNightGroup>> validate = validator.validate(group);
+        validate.forEach((v) -> {
+            result.addMessage(ResultType.INVALID, v.getMessage());
+        });
+        return result;
     }
 }

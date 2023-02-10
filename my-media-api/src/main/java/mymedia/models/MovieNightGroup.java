@@ -14,7 +14,7 @@ public class MovieNightGroup {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int groupId;
 
-    @Size(min = 5, max = 50)
+    @Size(min = 5, max = 50, message = "Group name length must be between 5 and 50")
     @NotNull
     private String groupName;
     @ManyToMany

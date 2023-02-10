@@ -34,7 +34,11 @@ public class MovieNightGroupController {
 
     @PostMapping
     public ResponseEntity<?> saveNewGroup(@RequestBody MovieNightGroup group, @AuthenticationPrincipal AppUser admin) {
-        service.saveNewGroup(group, admin);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        Result<MovieNightGroup> result = service.saveNewGroup(group, admin);
+        if (result.isSuccess()) {
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } else {
+            return ErrorResponse.build(result);
+        }
     }
 }

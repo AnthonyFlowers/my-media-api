@@ -26,7 +26,8 @@ create table app_user (
 
 create table movie_night_group (
 	group_id int primary key auto_increment,
-    group_name varchar(50) not null
+    group_name varchar(50) not null,
+    is_public bit not null default 0
  );
 
 create table movie_night_group_movie (
@@ -118,10 +119,10 @@ create procedure set_known_good_state()
 begin
 	set sql_safe_updates = 0;
 
-delete from movie_night_app_user;
+	delete from movie_night_app_user;
     alter table movie_night_app_user auto_increment = 1;
-delete from movie_night_group_movie;
-delete from movie_night_group;
+	delete from movie_night_group_movie;
+	delete from movie_night_group;
     alter table movie_night_group auto_increment = 1;
 	delete from app_user_role;
 	alter table app_user_role auto_increment = 1;
@@ -169,6 +170,7 @@ delete from movie_night_group;
 
     insert into app_user_role (app_user_id, app_role_id) values
         (1, 1),
+        (1, 2),
         (2, 2);
         
 	insert into movie_night_group (group_name) values
